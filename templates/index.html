@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Invoice Generator</h1>
+    </header>
+    <main>
+        <section id="invoice-form-section">
+            <h2>Invoice Details</h2>
+            <form id="invoice-form">
+                <!-- Form fields will go here -->
+                <p>Client Name: <input type="text" id="client-name" name="client_name"></p>
+                <p>Client Address: <input type="text" id="client-address" name="client_address"></p>
+                <!-- More fields for items, etc. -->
+                <button type="button" id="generate-pdf-btn">Generate PDF</button>
+            </form>
+        </section>
+
+        <section id="design-selector-section">
+            <h2>Select Design</h2>
+            <!-- Design selection (e.g., radio buttons) will go here -->
+            <label><input type="radio" name="invoice_design" value="design1" checked> Design 1</label>
+            <label><input type="radio" name="invoice_design" value="design2"> Design 2</label>
+            <label><input type="radio" name="invoice_design" value="design3"> Design 3</label>
+            <label><input type="radio" name="invoice_design" value="design4"> Design 4</label>
+        </section>
+
+        <section id="preview-section">
+            <h2>Live Preview</h2>
+            <div id="invoice-preview">
+                <!-- Real-time preview will be rendered here by JavaScript -->
+                <p>Preview will appear here.</p>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2025 Invoice App</p>
+    </footer>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

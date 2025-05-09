@@ -1,0 +1,10 @@
+/* Styles for Invoice Design 1 */
+#invoice-design-1 {
+    border: 2px solid blue;
+    padding: 15px;
+    background-color: #e6e6ff;
+}
+
+#invoice-design-1 h3 {
+    color: blue;
+}

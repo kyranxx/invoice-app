@@ -1,0 +1,10 @@
+/* Styles for Invoice Design 4 */
+#invoice-design-4 {
+    border: 2px solid orange;
+    padding: 15px;
+    background-color: #fff2e6;
+}
+
+#invoice-design-4 h6 {
+    color: orange;
+}

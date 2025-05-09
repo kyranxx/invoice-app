@@ -1,0 +1,10 @@
+/* Styles for Invoice Design 3 */
+#invoice-design-3 {
+    border: 2px dotted purple;
+    padding: 15px;
+    background-color: #f2e6ff;
+}
+
+#invoice-design-3 h5 {
+    color: purple;
+}

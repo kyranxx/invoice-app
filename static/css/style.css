@@ -1,0 +1,81 @@
+body {
+    font-family: sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+header {
+    background: #333;
+    color: #fff;
+    padding: 1rem 0;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+}
+
+main {
+    padding: 1rem;
+    overflow: auto;
+}
+
+section {
+    background: #fff;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border-radius: 5px;
+}
+
+#invoice-form-section, #design-selector-section {
+    width: 48%;
+    float: left;
+    margin-right: 2%;
+    box-sizing: border-box;
+}
+
+#preview-section {
+    width: 100%; /* Will be adjusted later, perhaps to float right */
+    clear: both; /* Temporary, until layout is finalized */
+    margin-top: 1rem;
+    min-height: 200px;
+    border: 1px solid #ddd;
+}
+
+#invoice-preview {
+    padding: 10px;
+}
+
+footer {
+    text-align: center;
+    padding: 1rem;
+    background: #333;
+    color: #fff;
+    margin-top: 1rem;
+}
+
+/* Basic form styling */
+input[type="text"],
+textarea {
+    width: 90%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+button {
+    background: #5cb85c;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #4cae4c;
+}

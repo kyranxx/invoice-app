@@ -1,0 +1,10 @@
+/* Styles for Invoice Design 2 */
+#invoice-design-2 {
+    border: 2px dashed green;
+    padding: 15px;
+    background-color: #e6ffe6;
+}
+
+#invoice-design-2 h4 {
+    color: green;
+}
