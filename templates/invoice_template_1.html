@@ -1,8 +1,116 @@
-<div class="invoice-design" id="invoice-design-1">
-    <h3>Invoice - Design 1</h3>
-    <p><strong>Client:</strong> <span class="client-name-placeholder">[Client Name]</span></p>
-    <p><strong>Address:</strong> <span class="client-address-placeholder">[Client Address]</span></p>
-    <!-- More placeholders for items, totals etc. -->
-    <p>Items will go here...</p>
-    <p>Total: [Total Amount]</p>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice {{ invoice_number }}</title>
+    <!-- Link to its specific CSS, which will be invoice_design_1.css -->
+    <!-- WeasyPrint will use the CSS linked here or provided directly -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/invoice_design_1.css') }}">
+    <style>
+        /* Basic structural styles for PDF rendering if not fully covered by external CSS */
+        body { font-family: sans-serif; margin: 20px; color: #333; }
+        .invoice-box { max-width: 800px; margin: auto; padding: 30px; border: 1px solid #eee; box-shadow: 0 0 10px rgba(0, 0, 0, .15); font-size: 16px; line-height: 24px; }
+        .header, .footer { text-align: center; margin-bottom: 20px; }
+        .company-details, .client-details { margin-bottom: 30px; }
+        .company-details div, .client-details div { margin-bottom: 5px; }
+        .invoice-meta { margin-bottom: 30px; }
+        .invoice-meta div { margin-bottom: 5px; }
+        .line-items table { width: 100%; line-height: inherit; text-align: left; border-collapse: collapse; }
+        .line-items th, .line-items td { padding: 8px; border: 1px solid #ddd; }
+        .line-items th { background-color: #f2f2f2; font-weight: bold; }
+        .totals { text-align: right; margin-top: 20px; }
+        .totals div { margin-bottom: 5px; font-size: 1.1em; }
+        .totals .grand-total { font-weight: bold; font-size: 1.2em; }
+        .payment-terms, .notes { margin-top: 30px; font-size: 0.9em; color: #555;}
+    </style>
+</head>
+<body>
+    <div class="invoice-box">
+        <div class="header">
+            <h1>INVOICE</h1>
+        </div>
+
+        <table style="width: 100%; margin-bottom: 30px;">
+            <tr>
+                <td style="width: 50%; vertical-align: top;">
+                    <div class="company-details">
+                        <strong>From:</strong><br>
+                        {{ supplier_name | default('[Supplier Name]') }}<br>
+                        {{ supplier_address | default('[Supplier Address]') | safe }}<br>
+                        Tax ID: {{ supplier_tax_id | default('[Supplier Tax ID]') }}<br>
+                        Bank: {{ supplier_bank_details | default('[Supplier Bank Details]') }}
+                    </div>
+                </td>
+                <td style="width: 50%; vertical-align: top; text-align: right;">
+                    <div class="client-details">
+                        <strong>To:</strong><br>
+                        {{ client_name | default('[Client Name]') }}<br>
+                        {{ client_address | default('[Client Address]') | safe }}<br>
+                        {% if client_vat_id %}VAT ID: {{ client_vat_id }}{% endif %}
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <div class="invoice-meta">
+            <div><strong>Invoice Number:</strong> {{ invoice_number | default('[Invoice #]') }}</div>
+            <div><strong>Invoice Date:</strong> {{ invoice_date | default('[Date]') }}</div>
+            <div><strong>Due Date:</strong> {{ due_date | default('[Due Date]') }}</div>
+            {% if delivery_date %}<div><strong>Delivery/Service Date:</strong> {{ delivery_date }}</div>{% endif %}
+        </div>
+
+        <div class="line-items">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th>Unit Price (€)</th>
+                        <th>VAT (%)</th>
+                        <th>Total (€)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td>{{ item.description }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.unit_price }}</td>
+                        <td>{{ item.vat_rate }}%</td>
+                        <td>{{ item.total }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" style="text-align:center;">No items.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="totals">
+            <div>Subtotal: €{{ subtotal | default('0.00') }}</div>
+            <div>Total VAT: €{{ total_vat | default('0.00') }}</div>
+            <div class="grand-total"><strong>Grand Total: €{{ grand_total | default('0.00') }}</strong></div>
+        </div>
+
+        {% if payment_terms %}
+        <div class="payment-terms">
+            <strong>Payment Terms:</strong>
+            <p>{{ payment_terms | safe }}</p>
+        </div>
+        {% endif %}
+
+        {% if notes %}
+        <div class="notes">
+            <strong>Notes:</strong>
+            <p>{{ notes | safe }}</p>
+        </div>
+        {% endif %}
+
+        <div class="footer">
+            <p>Thank you for your business!</p>
+        </div>
+    </div>
+</body>
+</html>

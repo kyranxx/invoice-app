@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Rechnung {{ invoice_number }} - Design 3</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/invoice_design_3.css') }}">
+    <style>
+        body { font-family: 'Georgia', serif; margin: 0; padding: 0; background-color: #fff; color: #333; font-size: 9.5pt; }
+        .invoice-wrapper { max-width: 185mm; margin: 10mm auto; padding: 12mm; border: 2px solid #2c3e50; background-color: #fdfdfd; }
+        .company-logo { text-align: center; margin-bottom: 8mm; }
+        .company-logo h1 { font-size: 2.2em; color: #2c3e50; margin:0; }
+        .section { margin-bottom: 7mm; }
+        .section:after { content: ""; display: table; clear: both; }
+        .col-half { width: 48%; float: left; font-size: 0.95em; }
+        .col-half:first-child { margin-right: 4%; }
+        .address-block p, .invoice-info p { margin: 0 0 1.2mm 0; line-height: 1.45; }
+        .address-block strong, .invoice-info strong { color: #2c3e50; }
+        .items-table { width: 100%; border-collapse: collapse; margin-top: 3mm; font-size: 0.95em; }
+        .items-table th, .items-table td { border: 1px solid #bdc3c7; padding: 2.2mm; text-align: left; }
+        .items-table th { background-color: #ecf0f1; color: #2c3e50; font-weight: bold; }
+        .items-table .text-right { text-align: right; }
+        .summary-table { width: 45%; float: right; margin-top: 5mm; font-size: 0.95em; }
+        .summary-table td { padding: 1.8mm; }
+        .summary-table .label { text-align: right; font-weight: bold; color: #2c3e50; }
+        .summary-table .value { text-align: right; }
+        .summary-table .grand-total .value { font-size: 1.15em; font-weight: bold; border-top: 2px solid #2c3e50; padding-top:2.5mm;}
+        .terms-notes { margin-top: 9mm; padding-top: 5mm; border-top: 1px dashed #bdc3c7; font-size:0.85em; }
+        .terms-notes h4 { color: #2c3e50; margin-bottom: 1.2mm; font-size: 1em;}
+        .invoice-footer { text-align: center; margin-top: 10mm; font-size: 0.75em; color: #7f8c8d; }
+    </style>
+</head>
+<body>
+    <div class="invoice-wrapper">
+        <div class="company-logo">
+            <h1>{{ supplier_name | default('[Ihr Firmenname]') }}</h1>
+        </div>
+
+        <div class="section">
+            <div class="col-half address-block">
+                <strong>Ausgestellt von:</strong>
+                <p>{{ supplier_address | default('[Ihre Adresse]') | safe }}</p>
+                <p>Steuernr./USt-IdNr.: {{ supplier_tax_id | default('[Ihre Steuernr./USt-IdNr.]') }}</p>
+                <p>Bank: {{ supplier_bank_details | default('[Ihre Bankverbindung]') }}</p>
+            </div>
+            <div class="col-half address-block" style="text-align: right;">
+                <strong>Rechnung an:</strong>
+                <p>{{ client_name | default('[Kundenname]') }}</p>
+                <p>{{ client_address | default('[Kundenadresse]') | safe }}</p>
+                {% if client_vat_id %}<p>USt-IdNr.: {{ client_vat_id }}</p>{% endif %}
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="col-half invoice-info">
+                <p><strong>Rechnungsnummer:</strong> {{ invoice_number | default('[Rechnungsnr.]') }}</p>
+                <p><strong>Rechnungsdatum:</strong> {{ invoice_date | default('[Datum]') }}</p>
+            </div>
+            <div class="col-half invoice-info" style="text-align: right;">
+                <p><strong>Fälligkeitsdatum:</strong> {{ due_date | default('[Fällig am]') }}</p>
+                {% if delivery_date %}<p><strong>Liefer-/Leistungsdatum:</strong> {{ delivery_date }}</p>{% endif %}
+            </div>
+        </div>
+
+        <table class="items-table">
+            <thead>
+                <tr>
+                    <th>Position</th>
+                    <th class="text-right">Menge</th>
+                    <th class="text-right">Stückpreis (€)</th>
+                    <th class="text-right">MwSt. (%)</th>
+                    <th class="text-right">Gesamt (€)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.description }}</td>
+                    <td class="text-right">{{ item.quantity }}</td>
+                    <td class="text-right">{{ item.unit_price }}</td>
+                    <td class="text-right">{{ item.vat_rate }}%</td>
+                    <td class="text-right">{{ item.total }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" style="text-align:center;">Keine Positionen.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <table class="summary-table">
+            <tr>
+                <td class="label">Zwischensumme:</td>
+                <td class="value">€{{ subtotal | default('0.00') }}</td>
+            </tr>
+            <tr>
+                <td class="label">MwSt. Gesamt:</td>
+                <td class="value">€{{ total_vat | default('0.00') }}</td>
+            </tr>
+            <tr class="grand-total">
+                <td class="label">Gesamtsumme:</td>
+                <td class="value">€{{ grand_total | default('0.00') }}</td>
+            </tr>
+        </table>
+        <div style="clear:both;"></div>
+
+
+        <div class="terms-notes">
+            {% if payment_terms %}
+            <div>
+                <h4>Zahlungsbedingungen:</h4>
+                <p>{{ payment_terms | safe }}</p>
+            </div>
+            {% endif %}
+            {% if notes %}
+            <div style="margin-top: {% if payment_terms %}3mm{% else %}0{% endif %};">
+                <h4>Anmerkungen:</h4>
+                <p>{{ notes | safe }}</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="invoice-footer">
+            <p>Vielen Dank. Wir freuen uns auf eine weitere Zusammenarbeit.</p>
+        </div>
+    </div>
+</body>
+</html>

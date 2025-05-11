@@ -1,0 +1,144 @@
+/* Invoice Design 5 - Colorful */
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 10px;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+}
+
+.invoice-container {
+    width: 90%; /* Use more page width */
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f8f9fa; /* Light background for content area */
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.05);
+}
+
+.header {
+    padding: 25px;
+    background: linear-gradient(135deg, #2980b9, #27ae60); /* Blue to Green gradient */
+    color: white;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header .company-name {
+    font-size: 2.8em;
+    font-weight: bold;
+    margin: 0;
+}
+.header .invoice-title {
+    font-size: 2.8em;
+    font-weight: bold;
+    text-align: right;
+    margin: 0;
+}
+.header .company-address {
+    font-size: 1.1em;
+    margin-top: 5px;
+}
+
+
+.details-section {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #e9f5ff; /* Light blue background for this section */
+    border-radius: 5px;
+    margin-bottom: 25px; /* Space before items table */
+}
+
+.details-section .column {
+    width: 48%;
+}
+
+.details-section h3 {
+    font-size: 1.3em;
+    color: #2980b9;
+    margin-top: 0;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #add8e6;
+    padding-bottom: 4px;
+}
+
+.details-section p {
+    margin: 0 0 6px 0;
+    line-height: 1.5;
+}
+.details-section p strong {
+    display: inline-block;
+    width: 120px; /* Align labels */
+    font-weight: 500;
+}
+
+.items-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.items-table th, .items-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+    vertical-align: top; /* Ensure content aligns well if it wraps */
+}
+
+.items-table th {
+    background-color: #3498db; /* Blue header for table */
+    color: white;
+    font-size: 1.1em;
+    font-weight: 500;
+}
+.items-table td.description { width: 40%; }
+.items-table td.quantity, .items-table td.vat { text-align: right; width: 12%; }
+.items-table td.unit-price, .items-table td.total { text-align: right; width: 18%; }
+
+
+.totals-section {
+    margin-top: 25px;
+    text-align: right;
+}
+
+.totals-section table {
+    width: 45%; /* Adjust width as needed */
+    margin-left: auto;
+    border-collapse: collapse;
+}
+
+.totals-section td {
+    padding: 8px 10px;
+    font-size: 1.1em;
+}
+.totals-section td.label {
+    text-align: right;
+    font-weight: 500;
+    color: #555;
+}
+.totals-section td.amount {
+    text-align: right;
+    font-weight: bold;
+}
+.totals-section .grand-total td {
+    font-size: 1.3em;
+    color: #27ae60; /* Green for grand total */
+    border-top: 2px solid #27ae60;
+    padding-top: 10px;
+}
+
+.footer-notes {
+    margin-top: 30px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+    font-size: 0.95em;
+    color: #777;
+}
+.footer-notes p {
+    margin: 0 0 5px 0;
+}

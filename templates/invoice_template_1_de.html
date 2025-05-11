@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Rechnung {{ invoice_number }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/invoice_design_1.css') }}">
+    <style>
+        body { font-family: sans-serif; margin: 20px; color: #333; font-size: 10pt; }
+        .invoice-box { max-width: 180mm; margin: 10mm auto; padding: 10mm; border: 1px solid #eee; box-shadow: 0 0 10px rgba(0, 0, 0, .15); line-height: 1.4; }
+        .header, .footer { text-align: center; margin-bottom: 7mm; }
+        .header h1 { font-size: 22pt; }
+        .company-details, .client-details { margin-bottom: 7mm; font-size: 9pt;}
+        .company-details div, .client-details div { margin-bottom: 1.5mm; }
+        .invoice-meta { margin-bottom: 7mm; font-size: 9pt;}
+        .invoice-meta div { margin-bottom: 1.5mm; }
+        .line-items table { width: 100%; line-height: inherit; text-align: left; border-collapse: collapse; font-size: 9pt;}
+        .line-items th, .line-items td { padding: 2mm; border: 1px solid #ddd; }
+        .line-items th { background-color: #f2f2f2; font-weight: bold; }
+        .totals { text-align: right; margin-top: 6mm; font-size: 9.5pt; }
+        .totals div { margin-bottom: 1.5mm; }
+        .totals .grand-total { font-weight: bold; font-size: 10.5pt; }
+        .payment-terms, .notes { margin-top: 8mm; font-size: 8.5pt; color: #555;}
+        .payment-terms p, .notes p { margin-top: 1mm;}
+    </style>
+</head>
+<body>
+    <div class="invoice-box">
+        <div class="header">
+            <h1>RECHNUNG</h1>
+        </div>
+
+        <table style="width: 100%; margin-bottom: 7mm;">
+            <tr>
+                <td style="width: 50%; vertical-align: top;">
+                    <div class="company-details">
+                        <strong>Von:</strong><br>
+                        {{ supplier_name | default('[Ihr Firmenname]') }}<br>
+                        {{ supplier_address | default('[Ihre Adresse]') | safe }}<br>
+                        Steuernr./USt-IdNr.: {{ supplier_tax_id | default('[Ihre Steuernr./USt-IdNr.]') }}<br>
+                        Bank: {{ supplier_bank_details | default('[Ihre Bankverbindung]') }}
+                    </div>
+                </td>
+                <td style="width: 50%; vertical-align: top; text-align: right;">
+                    <div class="client-details">
+                        <strong>An:</strong><br>
+                        {{ client_name | default('[Kundenname]') }}<br>
+                        {{ client_address | default('[Kundenadresse]') | safe }}<br>
+                        {% if client_vat_id %}USt-IdNr.: {{ client_vat_id }}{% endif %}
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <div class="invoice-meta">
+            <div><strong>Rechnungsnummer:</strong> {{ invoice_number | default('[Rechnungsnr.]') }}</div>
+            <div><strong>Rechnungsdatum:</strong> {{ invoice_date | default('[Datum]') }}</div>
+            <div><strong>Fälligkeitsdatum:</strong> {{ due_date | default('[Fällig am]') }}</div>
+            {% if delivery_date %}<div><strong>Liefer-/Leistungsdatum:</strong> {{ delivery_date }}</div>{% endif %}
+        </div>
+
+        <div class="line-items">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Beschreibung</th>
+                        <th>Menge</th>
+                        <th>Stückpreis (€)</th>
+                        <th>MwSt. (%)</th>
+                        <th>Gesamt (€)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td>{{ item.description }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.unit_price }}</td>
+                        <td>{{ item.vat_rate }}%</td>
+                        <td>{{ item.total }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" style="text-align:center;">Keine Positionen.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="totals">
+            <div>Zwischensumme: €{{ subtotal | default('0.00') }}</div>
+            <div>MwSt. Gesamt: €{{ total_vat | default('0.00') }}</div>
+            <div class="grand-total"><strong>Gesamtsumme: €{{ grand_total | default('0.00') }}</strong></div>
+        </div>
+
+        {% if payment_terms %}
+        <div class="payment-terms">
+            <strong>Zahlungsbedingungen:</strong>
+            <p>{{ payment_terms | safe }}</p>
+        </div>
+        {% endif %}
+
+        {% if notes %}
+        <div class="notes">
+            <strong>Anmerkungen:</strong>
+            <p>{{ notes | safe }}</p>
+        </div>
+        {% endif %}
+
+        <div class="footer">
+            <p>Vielen Dank für Ihren Auftrag!</p>
+        </div>
+    </div>
+</body>
+</html>

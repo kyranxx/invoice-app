@@ -35,3 +35,16 @@ Thumbs.db
 *.swp
 *.swo
 *~
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Test reports
+htmlcov/
+.pytest_cache/
+*.sqlite3
+
+# MyPy
+.mypy_cache/

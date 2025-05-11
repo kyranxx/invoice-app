@@ -3,16 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ get_translation('invoice_title_pdf', lang_code) }} {{ invoice_number }}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/invoice_design_2.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/invoice_design_5.css') }}">
 </head>
 <body>
     <div class="invoice-container">
         <div class="header">
-            <h1 class="company-name">{{ supplier_name }}</h1>
-            <h2 class="invoice-title">{{ get_translation('invoice_title_header', lang_code) }}</h2>
+            <div>
+                <h1 class="company-name">{{ supplier_name }}</h1>
+                <p class="company-address">{{ supplier_address }}</p>
+            </div>
+            <h1 class="invoice-title">{{ get_translation('invoice_title_header', lang_code) }}</h1>
         </div>
 
-        <div class="details-grid">
+        <div class="details-section">
             <div class="column">
                 <h3>{{ get_translation('from_title_pdf', lang_code) }}:</h3>
                 <p><strong>{{ get_translation('company_name_pdf', lang_code) }}:</strong> {{ supplier_name }}</p>
@@ -28,11 +31,15 @@
             </div>
         </div>
 
-        <div class="invoice-particulars">
-            <p><strong>{{ get_translation('invoice_number_pdf', lang_code) }}:</strong> {{ invoice_number }}</p>
-            <p><strong>{{ get_translation('invoice_date_pdf', lang_code) }}:</strong> {{ invoice_date }}</p>
-            <p><strong>{{ get_translation('due_date_pdf', lang_code) }}:</strong> {{ due_date }}</p>
-            <p><strong>{{ get_translation('delivery_date_pdf', lang_code) }}:</strong> {{ delivery_date }}</p>
+        <div class="details-section">
+            <div class="column">
+                <p><strong>{{ get_translation('invoice_number_pdf', lang_code) }}:</strong> {{ invoice_number }}</p>
+                <p><strong>{{ get_translation('invoice_date_pdf', lang_code) }}:</strong> {{ invoice_date }}</p>
+            </div>
+            <div class="column">
+                <p><strong>{{ get_translation('due_date_pdf', lang_code) }}:</strong> {{ due_date }}</p>
+                <p><strong>{{ get_translation('delivery_date_pdf', lang_code) }}:</strong> {{ delivery_date }}</p>
+            </div>
         </div>
 
         <table class="items-table">

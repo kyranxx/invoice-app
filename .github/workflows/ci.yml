@@ -1,0 +1,102 @@
+name: Python CI
+
+on:
+  push:
+    branches: [ "main", "master", "develop" ] # Adjust to your main branches
+  pull_request:
+    branches: [ "main", "master", "develop" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11"] # Specify Python versions to test against
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: 'pip' # Cache pip dependencies
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements-dev.txt
+        pip install -r requirements.txt
+
+    - name: Lint with flake8
+      run: |
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=88 --statistics
+
+    - name: Check formatting with black
+      run: |
+        black --check .
+
+    - name: Check import sorting with isort
+      run: |
+        isort --check-only .
+
+    - name: Test with pytest
+      run: |
+        pytest
+
+    - name: Deploy to PythonAnywhere
+      if: success() && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') # Only deploy on push to main/master and if tests pass
+      env:
+        PYTHONANYWHERE_WEBHOOK_URL: ${{ secrets.PYTHONANYWHERE_WEBHOOK_URL }}
+        PYTHONANYWHERE_WEBHOOK_SECRET: ${{ secrets.PYTHONANYWHERE_WEBHOOK_SECRET }}
+      run: |
+        if [ -z "$PYTHONANYWHERE_WEBHOOK_URL" ] || [ -z "$PYTHONANYWHERE_WEBHOOK_SECRET" ]; then
+          echo "PythonAnywhere webhook URL or secret not set. Skipping deployment."
+          # Optionally, fail the workflow: exit 1
+        else
+          echo "Attempting to trigger PythonAnywhere deployment..."
+          # Use curl to send a POST request to the webhook
+          # The X-Hub-Signature-256 header is calculated by GitHub and verified by your Flask app
+          # For this manual trigger, we rely on the secret being in the payload or a custom header if needed,
+          # but our Flask app currently expects X-Hub-Signature-256 which GitHub provides for its own webhooks.
+          # For a direct curl call triggered by us, we'd typically send the secret in a different way
+          # or simplify the Flask app's verification for this specific trigger.
+          #
+          # Given our Flask app's `verify_signature` expects X-Hub-Signature-256,
+          # a direct curl from Actions won't easily provide that.
+          # Let's adjust the concept: GitHub Actions will call the webhook,
+          # and the webhook on PythonAnywhere will verify a secret passed in the request body or a custom header.
+          #
+          # For simplicity in this step, we'll assume the PythonAnywhere webhook is secured by the secret
+          # and the URL itself being hard to guess, and the check for X-Hub-Signature-256 might be relaxed
+          # or adapted on the PythonAnywhere side if it's only called from this trusted GitHub Action.
+          #
+          # A more robust way for GitHub Actions to call a webhook it controls:
+          # 1. PythonAnywhere webhook expects a simple secret in a header (e.g., X-Deploy-Secret).
+          # 2. GitHub Action sends this header.
+          #
+          # Let's assume the current Flask app's X-Hub-Signature-256 is primarily for *GitHub-originated* webhooks.
+          # If *we* are calling it from an Action, we need a different auth or to make the endpoint more open
+          # (relying on the unguessable URL + secret in body/header).
+          #
+          # The current Flask app's webhook expects a body to hash for the X-Hub-Signature-256.
+          # We will send a dummy JSON payload.
+
+          curl -X POST \
+            -H "Content-Type: application/json" \
+            -H "X-Hub-Signature-256: $(echo -n '{"ref":"${{ github.ref }}","repository":"${{ github.repository }}"}' | openssl sha256 -hmac "$PYTHONANYWHERE_WEBHOOK_SECRET" -binary | xxd -p -c 256 | sed 's/^/sha256=/')" \
+            -d '{"ref":"${{ github.ref }}","repository":"${{ github.repository }}", "sender":"github_actions"}' \
+            "$PYTHONANYWHERE_WEBHOOK_URL"
+
+          # A simpler alternative if you modify the PythonAnywhere webhook to check a custom header:
+          # curl -X POST -H "X-Deploy-Secret: $PYTHONANYWHERE_WEBHOOK_SECRET" $PYTHONANYWHERE_WEBHOOK_URL
+
+          echo "PythonAnywhere deployment trigger sent."
+        fi

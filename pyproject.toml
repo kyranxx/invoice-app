@@ -1,0 +1,54 @@
+[tool.black]
+line-length = 88
+target-version = ['py38', 'py39', 'py310', 'py311', 'py312'] # Adjust to your target Python versions
+
+[tool.isort]
+profile = "black"
+line_length = 88
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+skip_gitignore = true
+
+[tool.flake8]
+max-line-length = 88
+extend-ignore = [
+    "E203", # Whitespace before ':' - often conflicts with Black
+    "W503", # Line break before binary operator - also conflicts with Black sometimes
+    "E501", # Line too long - let black handle this
+]
+exclude = [
+    ".git",
+    "__pycache__",
+    "docs",
+    "build",
+    "dist",
+    ".venv",
+    "venv",
+    "env",
+    "migrations" # if you have a migrations folder
+]
+# Per-file ignores can be useful too:
+# per-file-ignores =
+#     __init__.py:F401 # Ignore F401 (unused import) in __init__.py files
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q --cov=app --cov-report=html --cov-report=term" # app should be your main package/module name
+testpaths = [
+    "tests",
+]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+# Example: Filter out warnings if needed
+# filterwarnings = [
+#     "ignore::DeprecationWarning",
+# ]
+
+# If using pytest-flask
+# flask_debug = True
+# flask_env = "testing"
+# flask_app_import_name = "app:app" # or your_module:create_app for app factory pattern

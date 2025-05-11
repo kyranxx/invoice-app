@@ -1,81 +1,457 @@
+/* --- Creative Invoice App Styling --- */
+
+/* --- Font Imports --- */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400;500;700&family=Lato:wght@400;700&display=swap');
+
+/* --- Variables & Base --- */
+:root {
+    --font-primary: 'Lato', sans-serif;
+    --font-headings: 'Roboto', sans-serif;
+    --font-logo: 'Playfair Display', serif;
+
+    --color-bg-main: #FFFFFF; /* Main background to white */
+    --color-bg-section: #EDE7E0; /* Darker Beige for sections, header, footer */
+    --color-bg-fieldset: #FFFFFF;
+    --color-bg-row-highlight: #FFFFFF; /* Rows within sections also white, or very light gray if contrast needed */
+    --color-bg-legend: #EAE4DD; /* Beige background for legends - consistent with section beige */
+
+    --color-text-primary: #3D352E;
+    --color-text-secondary: #796A5F;
+    --color-text-headings: #2C2620;
+
+    --color-accent-primary: #C07858;
+    --color-accent-primary-darker: #A9664A;
+    --color-accent-primary-lighter: #D3B8A8; /* New Lighter Brown */
+    --color-accent-secondary: #8F9A7A;
+    --color-accent-secondary-darker: #7A8569;
+    --color-accent-yellow: #E0B841;
+    --color-accent-green-dark: #5A6D3C;
+
+    --color-border: #E0D8CF;
+    --color-border-input: #D1C6BC;
+
+    --shadow-card: 0 8px 22px rgba(74, 68, 60, 0.16); /* Enhanced shadow */
+    --shadow-input-focus: 0 0 0 3px rgba(192, 120, 88, 0.2);
+    --border-radius-main: 12px; /* More roundy */
+    --border-radius-input: 10px; /* More roundy */
+}
+
 body {
-    font-family: sans-serif;
-    line-height: 1.6;
+    font-family: var(--font-primary);
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
-    color: #333;
+    background-color: var(--color-bg-main);
+    color: var(--color-text-primary);
+    line-height: 1.5; /* More compact */
+    font-size: 14px; /* More compact base */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
+/* --- Header --- */
 header {
-    background: #333;
-    color: #fff;
-    padding: 1rem 0;
+    background-color: var(--color-bg-section);
+    padding: 10px 25px; /* Compacted */
     text-align: center;
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    position: relative;
 }
 
-header h1 {
+header h1 { /* Logo */
+    font-family: var(--font-logo);
+    color: var(--color-accent-primary);
     margin: 0;
+    font-size: 1.9em; /* Compacted */
+    font-weight: 700;
+}
+.header-subtitle { /* Copyright */
+    font-size: 0.95em; /* Made copyright bigger */
+    color: var(--color-text-secondary);
+    margin-top: 3px;
+}
+.header-subtitle a {
+    color: var(--color-accent-secondary);
+    text-decoration: none;
+}
+.header-subtitle a:hover { text-decoration: underline; }
+
+/* --- Main Workspace Layout --- */
+main.invoice-workspace {
+    display: flex;
+    gap: 18px;
+    padding: 18px;
+    max-width: 1350px;
+    margin: 8px auto;
 }
 
-main {
-    padding: 1rem;
-    overflow: auto;
+.form-column { flex: 3; min-width: 380px; }
+.preview-column {
+    flex: 2;
+    min-width: 280px;
+    display: flex; /* Added */
+    flex-direction: column; /* Added */
 }
 
+/* --- Section Styling --- */
 section {
-    background: #fff;
-    margin-bottom: 1rem;
-    padding: 1rem;
-    border-radius: 5px;
+    background-color: var(--color-bg-section);
+    padding: 15px 20px; /* Compacted */
+    border-radius: var(--border-radius-main);
+    box-shadow: var(--shadow-card);
+    margin-bottom: 18px;
+    border: 2px solid var(--color-border); /* Thicker border */
 }
 
-#invoice-form-section, #design-selector-section {
-    width: 48%;
-    float: left;
-    margin-right: 2%;
+section h2, form#invoice-form legend {
+    font-family: var(--font-primary); /* Changed legend to primary font */
+    color: var(--color-text-headings);
+    font-weight: 700;
+    position: relative;
+    padding-bottom: 6px;
+    margin-bottom: 0px;
+    width: 100%;
     box-sizing: border-box;
 }
-
-#preview-section {
-    width: 100%; /* Will be adjusted later, perhaps to float right */
-    clear: both; /* Temporary, until layout is finalized */
-    margin-top: 1rem;
-    min-height: 200px;
-    border: 1px solid #ddd;
+section h2 { font-size: 1.6em; margin-top: 0; } /* Made section titles even bigger */
+form#invoice-form legend {
+    font-size: 1.4em; /* Made fieldset legends even bigger */
+    padding: 8px 15px; /* Added padding */
+    margin-left: -15px; /* To make background span parent padding */
+    margin-right: -15px; /* To make background span parent padding */
+    margin-bottom: 3px; /* Space below legend - MODIFIED */
+    background-color: var(--color-accent-primary-lighter); /* Lighter Brown background for legend */
+    color: var(--color-text-headings); /* Darker text for contrast on lighter brown */
+    width: calc(100% + 30px); /* Adjusted width to span parent padding */
+    border-radius: 6px 6px 0 0; /* Rounded top corners - MORE POINTY */
+    border-bottom: 1px solid var(--color-accent-primary); /* Original brown as border */
+    box-sizing: border-box;
+    top: 22px; /* ADDED to shift legend down */
 }
 
-#invoice-preview {
-    padding: 10px;
+/* --- Form Styling (More Compact) --- */
+form#invoice-form fieldset.form-section {
+    border: 2px solid var(--color-border); /* Thicker border */
+    padding: 10px 15px; /* Compacted */
+    margin-bottom: 15px;
+    border-radius: var(--border-radius-input);
+    background-color: var(--color-bg-fieldset);
 }
 
-footer {
-    text-align: center;
-    padding: 1rem;
-    background: #333;
-    color: #fff;
-    margin-top: 1rem;
+/* Styling for rows within sections */
+form#invoice-form fieldset.form-section > p {
+    background-color: var(--color-bg-row-highlight);
+    padding: 6px 12px; /* Reduced top/bottom padding for compactness */
+    margin-left: -15px; /* Extend to full width of fieldset */
+    margin-right: -15px; /* Extend to full width of fieldset */
+    /* border-bottom: 1px solid var(--color-border); REMOVED separator line */
+    overflow: hidden; /* To prevent any minor rendering artifacts from showing */
+    list-style-type: none; /* Ensure no list markers appear */
+}
+form#invoice-form fieldset.form-section > p::before,
+form#invoice-form fieldset.form-section > p::after {
+    content: "";
+    display: none;
+}
+form#invoice-form fieldset.form-section > p:last-child {
+    /* border-bottom: none; No border for the last item - already removed above */
+}
+form#invoice-form fieldset.form-section > p label {
+    margin-bottom: 2px; /* Reduced space below label */
+    color: var(--color-text-secondary);
+    font-size: 0.95em; /* Made input labels bigger */
+    font-weight: 600;
 }
 
-/* Basic form styling */
-input[type="text"],
-textarea {
-    width: 90%;
+
+form#invoice-form label { /* General label styling, ensure it's consistent or overridden by more specific rules */
+    display: block;
+    margin-bottom: 2px; /* Reduced space below label */
+    color: var(--color-text-secondary);
+    font-size: 0.95em; /* Made input labels bigger */
+    font-weight: 600;
+}
+
+form#invoice-form input[type="text"],
+form#invoice-form input[type="number"],
+form#invoice-form input[type="date"],
+form#invoice-form textarea {
+    width: 100%;
+    padding: 9px 12px; /* Increased padding */
+    margin-bottom: 2px; /* Further reduced space below input/textarea */
+    border: 1px solid var(--color-border-input);
+    border-radius: var(--border-radius-input);
+    font-size: 0.9em; /* Increased font size */
+    box-sizing: border-box;
+    background-color: #fff;
+    color: var(--color-text-primary);
+}
+form#invoice-form input[type="text"]:focus,
+form#invoice-form input[type="number"]:focus,
+form#invoice-form input[type="date"]:focus,
+form#invoice-form textarea:focus {
+    border-color: var(--color-accent-primary);
+    box-shadow: var(--shadow-input-focus);
+    outline: none;
+}
+form#invoice-form textarea { min-height: 50px; }
+
+/* Line Items - New Layout */
+#line-items-section .line-item:first-child { /* Special styling for the first row with direct inputs */
+    display: flex;
+    gap: 8px;
+    align-items: center; /* Vertically align items */
+    padding: 8px; /* Compact padding */
+}
+#line-items-section .line-item:first-child input {
+    margin-bottom: 0; /* Remove bottom margin for inputs in this row */
+}
+.item-input-description { flex-grow: 3; min-width: 150px; } /* Description takes more space */
+.item-input-small { flex-grow: 1; width: 70px; min-width: 60px; } /* Quantity, VAT */
+.item-input-medium { flex-grow: 1.5; width: 90px; min-width: 80px; } /* Unit Price */
+
+/* Labels for line items */
+.line-item-labels {
+    display: flex;
+    gap: 8px;
+    padding: 0 8px 4px 8px; /* Align with line-item padding */
+    margin-top: 22px; /* ADDED to push labels below shifted legend */
+    margin-bottom: 4px;
+    font-size: 0.9em; /* Increased font size */
+    color: var(--color-text-secondary);
+    font-weight: 600;
+    border-bottom: 1px solid var(--color-border);
+}
+.item-label-description { flex-grow: 3; min-width: 150px; }
+.item-label-quantity, .item-label-vat_rate { flex-grow: 1; width: 70px; min-width: 60px; text-align: left; }
+.item-label-unit_price { flex-grow: 1.5; width: 90px; min-width: 80px; text-align: left; }
+.item-label-action { width: 30px; /* Space for remove button */ text-align: right; }
+
+
+/* Styling for ALL line items to be single line */
+#line-items-section .line-item {
+    display: flex;
+    gap: 8px;
+    align-items: center;
     padding: 8px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    margin-bottom: 8px;
+    border-radius: var(--border-radius-input);
+    border: 1px solid var(--color-border);
+    background-color: var(--color-bg-row-highlight); /* Consistent background */
+}
+#line-items-section .line-item input {
+    margin-bottom: 0;
 }
 
-button {
-    background: #5cb85c;
-    color: white;
-    padding: 10px 15px;
+
+button#add-item-btn.text-btn { /* "Add" text button */
+    background: none;
     border: none;
-    border-radius: 4px;
+    color: var(--color-accent-secondary);
+    padding: 5px;
+    font-size: 0.85em;
     cursor: pointer;
+    text-decoration: underline;
+    margin-top: 5px; /* Space from the input row */
+    display: block; /* Or inline-block if preferred next to something */
+}
+button#add-item-btn.text-btn:hover { color: var(--color-accent-secondary-darker); }
+
+.remove-item-btn.icon-btn { /* Red X icon button */
+    background: none;
+    border: none;
+    color: #E74C3C; /* Red color for X */
+    font-size: 1.4em; /* Make X bigger */
+    font-weight: bold;
+    padding: 0 5px;
+    cursor: pointer;
+    line-height: 1; /* Align X better */
+    margin-left: auto;
+}
+.remove-item-btn.icon-btn:hover { color: #C0392B; /* Darker red */ }
+
+
+/* --- Button Styling --- */
+button.primary-action-btn, button#preview-invoice-btn, button#generate-pdf-btn {
+    background-color: var(--color-accent-primary-lighter); /* Lighter brown */
+    color: var(--color-text-headings); /* Darker text for contrast */
+    padding: 10px 28px; /* Increased padding for bigger buttons */
+    font-size: 0.9em; /* Increased font size */
+    /* ... other styles from before ... */
+    border: none; border-radius: var(--border-radius-input); cursor: pointer; font-weight: 700; transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 8px; box-shadow: 0 2px 3px rgba(0,0,0,0.08);
+    display: inline-flex; /* For icon alignment */
+    align-items: center;
+    gap: 6px; /* Space between icon and text */
+    margin-right: 8px; /* Added margin to separate from download button */
+}
+button.primary-action-btn:hover, button#preview-invoice-btn:hover, button#generate-pdf-btn:not(.disabled):hover {
+    background-color: var(--color-accent-primary); /* Original brown on hover */
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.12);
+}
+button#generate-pdf-btn.disabled {
+    background-color: #B0A69C; color: #E9E2D9; cursor: not-allowed; box-shadow: none; transform: none;
+}
+button#generate-pdf-btn svg {
+    width: 1.5em; /* Made icon bigger */
+    height: 1.5em; /* Made icon bigger */
+    margin-right: 4px;
 }
 
-button:hover {
-    background: #4cae4c;
+
+/* --- Design Selector (Styled Buttons) --- */
+#design-selector-section h2 { font-size: 1.15em; margin-bottom: 10px; }
+#design-selector-section .design-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 3px;
+    justify-content: stretch; /* Make buttons fill the line */
+}
+#design-selector-section .design-options label { /* Clickable wrapper for the custom radio button */
+    cursor: pointer;
+    display: inline-block; /* Ensures label wraps its content appropriately */
+    position: relative;
+    flex-grow: 1; /* Allow buttons to grow and fill space */
+}
+#design-selector-section .design-options input[type="radio"] {
+    display: none; /* Hide the actual radio input */
+}
+#design-selector-section .design-options label span { /* This span becomes the visible button */
+    display: block;
+    padding: 10px 15px; /* Increased padding for bigger buttons */
+    font-size: 0.85em; /* Slightly larger font for bigger buttons */
+    background-color: var(--color-bg-fieldset);
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border-input);
+    border-radius: var(--border-radius-input);
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    text-align: center;
+    line-height: 1.2; /* Ensure text is vertically centered if padding is uneven */
+}
+#design-selector-section .design-options label:hover span { /* Hover effect on the visible button part */
+    background-color: var(--color-bg-section);
+    border-color: var(--color-accent-secondary);
+}
+#design-selector-section .design-options input[type="radio"]:checked + span { /* Styles for the visible button part when radio is checked */
+    background-color: var(--color-accent-primary);
+    color: white;
+    border-color: var(--color-accent-primary-darker);
+    font-weight: 700;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* --- Preview Section --- */
+#preview-section {
+    margin-top: 15px;
+    display: flex; /* Added */
+    flex-direction: column; /* Added */
+    flex-grow: 1; /* Added - allows this section to take available space */
+}
+#preview-section .preview-header {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;
+}
+#preview-section .preview-header h2 { margin-bottom: 0; font-size: 1.15em; }
+#preview-section .preview-header button { margin-top: 0; } /* Align buttons with heading */
+
+#invoice-preview-container {
+    border: 1px solid var(--color-border); padding: 0; min-height: 150px; /* MODIFIED padding */
+    background-color: #fff; border-radius: var(--border-radius-input);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    min-height: 730px; /* New min-height */
+    max-height: 85vh; /* New max-height */
+    height: auto; /* New height */
+    overflow-y: auto; /* Allow scrolling within container if content overflows */
+}
+#invoice-preview-container embed { height: 100%; width: 100%; display: block; /* ADDED */ }
+#invoice-preview-container .placeholder-text { padding: 25px 10px; font-size: 0.9em; }
+
+/* --- Footer --- */
+footer {
+    padding: 20px; /* Increased padding */
+    margin-top: 25px; /* Increased margin */
+    text-align: center; /* Center footer text */
+    background-color: var(--color-bg-section); /* Footer background */
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    font-size: 0.9em;
+}
+
+
+/* Language Toggle Styling (Bigger Buttons) */
+.language-toggle {
+    position: absolute; top: 50%; transform: translateY(-50%); right: 20px; display: flex; gap: 8px;
+}
+.language-toggle button {
+    padding: 7px 10px; /* Bigger */ font-size: 0.9em; /* Bigger */
+    background-color: var(--color-bg-main); /* White background for inactive */
+    color: var(--color-accent-primary); /* Brown text for inactive */
+    border: 1px solid var(--color-accent-primary); /* Brown border for inactive */
+    cursor: pointer; border-radius: var(--border-radius-input); display: flex; align-items: center; gap: 5px; transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+.language-toggle button:hover {
+    background-color: var(--color-bg-section); /* Light beige on hover for inactive */
+    border-color: var(--color-accent-primary-darker);
+}
+.language-toggle button.active {
+    background-color: var(--color-accent-primary-darker); /* Darker brown for active */
+    color: white; /* White text for active */
+    border-color: var(--color-accent-primary); /* Darker brown border for active */
+    font-weight: 700;
+}
+.language-toggle img.flag-icon { width: 22px; height: auto; border-radius: 2px; } /* Bigger */
+
+
+/* --- Responsive Design --- */
+@media (max-width: 992px) {
+    main.invoice-workspace { flex-direction: column; }
+    .form-column, .preview-column { flex: none; width: 100%; min-width: auto; }
+    .preview-column { margin-top: 18px; }
+    .language-toggle { position: static; justify-content: center; margin-top: 10px; padding-bottom: 3px;}
+    header { padding-bottom: 8px; }
+    #invoice-preview-container { max-height: 70vh; } /* Adjusted for smaller screens */
+}
+
+@media (max-width: 768px) {
+    body { font-size: 13.5px; }
+    header h1 { font-size: 1.6em; }
+    section { padding: 10px; }
+    section h2 { font-size: 1.2em; }
+    form#invoice-form legend { font-size: 1.05em; }
+    form#invoice-form input[type="text"],
+    form#invoice-form input[type="number"],
+    form#invoice-form input[type="date"],
+    form#invoice-form textarea { padding: 6px 8px; font-size: 0.8em; }
+
+    #line-items-section .line-item,
+    #line-items-section .line-item-labels {
+        flex-direction: column; /* Stack all item inputs and labels */
+        align-items: stretch;
+    }
+    #line-items-section .line-item input,
+    .line-item-labels span {
+        width: 100% !important; /* Full width for stacked inputs/labels */
+        box-sizing: border-box;
+        text-align: left !important; /* Ensure labels are left-aligned when stacked */
+    }
+    .item-label-action { display: none; } /* Hide action label column on small screens */
+
+
+    .remove-item-btn.icon-btn {
+        margin-left: 0; margin-top: 6px; width: 100%; text-align: center; padding: 6px;
+    }
+    #design-selector-section .design-options { flex-direction: column; gap: 5px; }
+    #design-selector-section label { width: 100%; box-sizing: border-box; } /* Full width buttons */
+
+    button.primary-action-btn, button#preview-invoice-btn, button#generate-pdf-btn { font-size: 0.85em; padding: 8px 12px; }
+    .language-toggle button { padding: 6px 9px; font-size: 0.75em;}
+    .language-toggle img.flag-icon { width: 16px; }
+    footer p { font-size: 0.85em; } /* Adjusted footer text size */
+}
+@media (max-width: 480px) {
+    header h1 { font-size: 1.4em; }
+    section h2 { font-size: 1.1em; }
+    form#invoice-form legend { font-size: 0.95em; }
+    /* .line-item-fields { grid-template-columns: 1fr; } Already handled by flex-direction: column */
 }

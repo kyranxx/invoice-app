@@ -3,44 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice Generator</title>
+    <title>InvoiceCraft - Professional Invoice Generator</title> <!-- More descriptive title -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Favicon placeholder - consider adding a real one -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧾</text></svg>">
 </head>
 <body>
     <header>
-        <h1>Invoice Generator</h1>
+        <h1>InvoiceCraft</h1>
+        <div class="header-subtitle" data-translate-key="footer_copyright_header">
+            &copy; 2025 Daniel Blanárik. All rights reserved. | <a href="https://github.com/kyranxx/invoice-app" target="_blank" rel="noopener noreferrer" data-translate-key="github_link_text_header">View on GitHub</a>
+        </div>
+        <div class="language-toggle">
+            <button type="button" id="lang-en" class="active" data-lang="en">
+                <img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/flags/4x3/gb.svg" alt="EN" class="flag-icon"> EN
+            </button>
+            <button type="button" id="lang-de" data-lang="de">
+                <img src="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/flags/4x3/de.svg" alt="DE" class="flag-icon"> DE
+            </button>
+        </div>
     </header>
-    <main>
-        <section id="invoice-form-section">
-            <h2>Invoice Details</h2>
-            <form id="invoice-form">
-                <!-- Form fields will go here -->
-                <p>Client Name: <input type="text" id="client-name" name="client_name"></p>
-                <p>Client Address: <input type="text" id="client-address" name="client_address"></p>
-                <!-- More fields for items, etc. -->
-                <button type="button" id="generate-pdf-btn">Generate PDF</button>
-            </form>
-        </section>
+    <main class="invoice-workspace">
+        <div class="form-column">
+            <section id="invoice-form-section">
+                <h2 data-translate-key="create_invoice_title">Create Your Invoice</h2>
+                <form id="invoice-form">
+                    <fieldset class="form-section">
+                        <legend data-translate-key="your_details_legend">Your Details</legend>
+                    <p><label for="supplier-name" data-translate-key="supplier_name_label">Company Name:</label> <input type="text" id="supplier-name" name="supplier_name" required></p>
+                    <p><label for="supplier-address" data-translate-key="supplier_address_label">Address:</label> <input type="text" id="supplier-address" name="supplier_address" required></p>
+                    <p><label for="supplier-tax-id" data-translate-key="supplier_tax_id_label">Tax ID (Steuernummer/USt-IdNr.):</label> <input type="text" id="supplier-tax-id" name="supplier_tax_id" required></p>
+                    <p><label for="supplier-bank-details" data-translate-key="supplier_bank_details_label">Bank Details (IBAN, BIC):</label> <input type="text" id="supplier-bank-details" name="supplier_bank_details" required></p>
+                    </fieldset>
 
-        <section id="design-selector-section">
-            <h2>Select Design</h2>
-            <!-- Design selection (e.g., radio buttons) will go here -->
-            <label><input type="radio" name="invoice_design" value="design1" checked> Design 1</label>
-            <label><input type="radio" name="invoice_design" value="design2"> Design 2</label>
-            <label><input type="radio" name="invoice_design" value="design3"> Design 3</label>
-            <label><input type="radio" name="invoice_design" value="design4"> Design 4</label>
-        </section>
+                    <fieldset class="form-section">
+                        <legend data-translate-key="client_details_legend">Client Details</legend>
+                    <p><label for="client-name" data-translate-key="client_name_label">Company Name:</label> <input type="text" id="client-name" name="client_name" required></p>
+                    <p><label for="client-address" data-translate-key="client_address_label">Address:</label> <input type="text" id="client-address" name="client_address" required></p>
+                    <p><label for="client-vat-id" data-translate-key="client_vat_id_label">VAT ID (USt-IdNr.):</label> <input type="text" id="client-vat-id" name="client_vat_id"></p>
+                    </fieldset>
 
-        <section id="preview-section">
-            <h2>Live Preview</h2>
-            <div id="invoice-preview">
-                <!-- Real-time preview will be rendered here by JavaScript -->
-                <p>Preview will appear here.</p>
-            </div>
-        </section>
+                    <fieldset class="form-section">
+                        <legend data-translate-key="invoice_particulars_legend">Invoice Particulars</legend>
+                    <p><label for="invoice-number" data-translate-key="invoice_number_label">Invoice Number:</label> <input type="text" id="invoice-number" name="invoice_number" required></p>
+                    <p><label for="invoice-date" data-translate-key="invoice_date_label">Invoice Date:</label> <input type="date" id="invoice-date" name="invoice_date" required></p>
+                    <p><label for="due-date" data-translate-key="due_date_label">Due Date:</label> <input type="date" id="due-date" name="due_date" required></p>
+                    <p><label for="delivery-date" data-translate-key="delivery_date_label">Delivery/Service Date:</label> <input type="date" id="delivery-date" name="delivery_date"></p>
+                    </fieldset>
+
+                    <fieldset id="line-items-section" class="form-section">
+                        <legend data-translate-key="items_services_legend">Items & Services</legend>
+                        <div class="line-item-labels">
+                            <span class="item-label-description" data-translate-key="item_label_description">Description</span>
+                            <span class="item-label-quantity" data-translate-key="item_label_quantity">Qty</span>
+                            <span class="item-label-unit_price" data-translate-key="item_label_unit_price">Unit Price</span>
+                            <span class="item-label-vat_rate" data-translate-key="item_label_vat_rate">VAT (%)</span>
+                            <span class="item-label-action">&nbsp;</span> <!-- Placeholder for remove button column -->
+                        </div>
+                        <div id="line-items-container">
+                            <!-- Initial line item - direct inputs -->
+                            <div class="line-item">
+                                <input type="text" name="item_description[]" data-translate-placeholder-key="item_description_placeholder" placeholder="Service or Product" required class="item-input-description">
+                                <input type="number" name="item_quantity[]" value="1" min="0" step="any" required class="item-input-small" title="Quantity">
+                                <input type="number" name="item_unit_price[]" value="0.00" min="0" step="0.01" required class="item-input-medium" title="Unit Price (€)">
+                                <input type="number" name="item_vat_rate[]" value="19" min="0" step="1" required class="item-input-small" title="VAT Rate (%)">
+                                <button type="button" class="remove-item-btn icon-btn" data-translate-title-key="remove_item_title" title="Remove item">&times;</button>
+                            </div>
+                        </div>
+                        <button type="button" id="add-item-btn" class="text-btn" data-translate-key="add_item_btn_text">Add Item</button>
+                    </fieldset>
+
+                    <fieldset class="form-section">
+                        <legend data-translate-key="payment_notes_legend">Payment & Notes</legend>
+                    <p><label for="payment-terms" data-translate-key="payment_terms_label">Payment Terms:</label> <textarea id="payment-terms" name="payment_terms" rows="3" placeholder="e.g., Payment due within 14 days" data-translate-placeholder-key="payment_terms_placeholder">Please pay within 14 days.</textarea></p>
+                    <p><label for="notes" data-translate-key="notes_label">Notes:</label> <textarea id="notes" name="notes" rows="3" placeholder="e.g., Thank you for your business!" data-translate-placeholder-key="notes_placeholder"></textarea></p>
+                    </fieldset>
+                    <!-- "Craft Preview" button moved under design selector -->
+                </form>
+            </section>
+        </div>
+
+        <div class="preview-column">
+            <section id="design-selector-section">
+                <h2 data-translate-key="choose_style_title">Choose Your Style</h2>
+                <div class="design-options">
+                    <label><input type="radio" name="invoice_design" value="design1" checked><span data-translate-key="style_modern">Modern</span></label> <!-- Modern default -->
+                    <label><input type="radio" name="invoice_design" value="design2"><span data-translate-key="style_classic">Classic</span></label>
+                    <label><input type="radio" name="invoice_design" value="design3"><span data-translate-key="style_elegant">Elegant</span></label>
+                    <label><input type="radio" name="invoice_design" value="design4"><span data-translate-key="style_minimalist">Minimalist</span></label>
+                    <label><input type="radio" name="invoice_design" value="design5"><span data-translate-key="style_colorful">Colorful</span></label>
+                </div>
+                 <!-- Show Preview button moved to preview header -->
+            </section>
+
+            <section id="preview-section">
+                <div class="preview-header">
+                    <h2 data-translate-key="preview_title">Preview</h2>
+                    <button type="button" id="preview-invoice-btn" class="primary-action-btn">
+                        <!-- Eye Icon SVG -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16"> {/* Increased size to 20x20 */}
+                          <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                          <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+                        </svg>
+                        <span data-translate-key="show_preview_btn">Show Preview</span>
+                    </button>
+                    <button type="button" id="generate-pdf-btn" class="primary-action-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16"> {/* Increased size to 18x18 */}
+                            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                        </svg>
+                        <span data-translate-key="download_pdf_btn_text">Download PDF</span>
+                    </button>
+                </div>
+                <div id="invoice-preview-container">
+                    <p class="placeholder-text" data-translate-key="preview_placeholder">Your crafted invoice will appear here once you click "Show Preview".</p>
+                </div>
+            </section>
+        </div>
     </main>
     <footer>
-        <p>&copy; 2025 Invoice App</p>
+        <p data-translate-key="footer_simple_text">InvoiceCraft - Simple Invoicing</p>
     </footer>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>

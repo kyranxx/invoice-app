@@ -1,88 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Invoice {{ invoice_number }} - Design 4</title>
+    <title>Rechnung {{ invoice_number }} - Design 4</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/invoice_design_4.css') }}">
     <style>
-        /* PDF-friendly styles for Design 4 (Minimalist) */
-        body {
-            font-family: 'Lato', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #fff; /* PDF default */
-            color: #333; /* Good contrast for print */
-            font-size: 9pt; /* Standard PDF font size */
-            line-height: 1.4;
-        }
-        .invoice-document {
-            width: 100%;
-            max-width: 185mm; /* A4 safe width (210mm - 12.5mm margins each side) */
-            min-height: 270mm; /* A4 height with some margin */
-            margin: 10mm auto;
-            background: #fff;
-            padding: 0; /* Padding will be on inner elements or via @page margins */
-            box-shadow: none; /* No shadow for PDF */
-        }
-        .invoice-header-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 5mm;
-            border-bottom: 2px solid #4a90e2;
-            margin-bottom: 8mm;
-        }
+        body { font-family: 'Lato', sans-serif; margin: 0; padding: 0; background-color: #fff; color: #333; font-size: 9pt; line-height: 1.4; }
+        .invoice-document { width: 100%; max-width: 185mm; min-height: 270mm; margin: 10mm auto; background: #fff; padding: 0; box-shadow: none; }
+        .invoice-header-section { display: flex; justify-content: space-between; align-items: center; padding-bottom: 5mm; border-bottom: 2px solid #4a90e2; margin-bottom: 8mm; }
         .invoice-header-section .company-name h1 { font-size: 2em; color: #4a90e2; margin: 0; }
         .invoice-header-section .invoice-title h2 { font-size: 1.6em; color: #555; margin: 0; text-align: right; }
-
         .addresses-section { display: flex; justify-content: space-between; margin-bottom: 8mm; }
         .addresses-section .address-block { width: 48%; font-size: 0.95em; }
-        .addresses-section .address-block h4 {
-            font-size: 1em;
-            color: #4a90e2;
-            margin-bottom: 2mm;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 1mm;
-        }
+        .addresses-section .address-block h4 { font-size: 1em; color: #4a90e2; margin-bottom: 2mm; border-bottom: 1px solid #eee; padding-bottom: 1mm;}
         .addresses-section .address-block p { margin: 0 0 1mm 0; line-height: 1.5; }
-
-        .meta-info-section {
-            background-color: #f8f9fa;
-            padding: 3mm 4mm;
-            border-radius: 3px;
-            margin-bottom: 8mm;
-            display: flex;
-            justify-content: space-between; /* Space out items */
-            flex-wrap: wrap; /* Allow wrapping if too many items */
-        }
+        .meta-info-section { background-color: #f8f9fa; padding: 3mm 4mm; border-radius: 3px; margin-bottom: 8mm; display: flex; justify-content: space-between; flex-wrap: wrap; }
         .meta-info-section p { margin: 1mm 3mm; font-size: 0.9em; }
-
         .items-table-section table { width: 100%; border-collapse: collapse; margin-bottom: 7mm;}
-        .items-table-section th, .items-table-section td {
-            border: 1px solid #dde4e9; /* Softer border */
-            padding: 2.5mm 3mm;
-            text-align: left;
-        }
-        .items-table-section th {
-            background-color: #4a90e2;
-            color: white;
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size:0.85em;
-        }
+        .items-table-section th, .items-table-section td { border: 1px solid #dde4e9; padding: 2.5mm 3mm; text-align: left; }
+        .items-table-section th { background-color: #4a90e2; color: white; font-weight: 600; text-transform: uppercase; font-size:0.85em; }
         .items-table-section .text-right { text-align: right; }
-
         .totals-section { margin-top: 8mm; padding-top: 5mm; border-top: 2px solid #4a90e2; }
         .totals-section table { width: 45%; float: right; }
         .totals-section td { padding: 2mm 0; font-size: 0.95em; }
         .totals-section .label { text-align: right; font-weight: 600; padding-right: 3mm; color: #444; }
         .totals-section .value { text-align: right; }
         .totals-section .grand-total .value { font-size: 1.2em; font-weight: bold; color: #4a90e2; }
-
         .additional-info-section { margin-top: 10mm; padding-top: 5mm; border-top: 1px solid #eee; }
         .additional-info-section h5 { font-size: 0.95em; color: #4a90e2; margin-bottom: 2mm; }
         .additional-info-section p { font-size: 0.85em; line-height: 1.6; color: #555; }
-
         .page-footer { text-align: center; margin-top: 12mm; font-size: 0.8em; color: #777; padding-top:5mm; border-top: 1px solid #eee;}
     </style>
 </head>
@@ -90,44 +36,44 @@
     <div class="invoice-document">
         <div class="invoice-header-section">
             <div class="company-name">
-                <h1>{{ supplier_name | default('[Your Company]') }}</h1>
+                <h1>{{ supplier_name | default('[Ihre Firma]') }}</h1>
             </div>
             <div class="invoice-title">
-                <h2>INVOICE</h2>
+                <h2>RECHNUNG</h2>
             </div>
         </div>
 
         <div class="addresses-section">
             <div class="address-block">
-                <h4>Supplier Details:</h4>
-                <p>{{ supplier_address | default('[Supplier Address]') | safe }}</p>
-                <p>Tax ID: {{ supplier_tax_id | default('[Supplier Tax ID]') }}</p>
-                <p>Bank: {{ supplier_bank_details | default('[Supplier Bank Details]') }}</p>
+                <h4>Lieferant:</h4>
+                <p>{{ supplier_address | default('[Ihre Adresse]') | safe }}</p>
+                <p>Steuernr./USt-IdNr.: {{ supplier_tax_id | default('[Ihre Steuernr./USt-IdNr.]') }}</p>
+                <p>Bank: {{ supplier_bank_details | default('[Ihre Bankverbindung]') }}</p>
             </div>
             <div class="address-block" style="text-align: right;">
-                <h4>Client Details:</h4>
-                <p>{{ client_name | default('[Client Name]') }}</p>
-                <p>{{ client_address | default('[Client Address]') | safe }}</p>
-                {% if client_vat_id %}<p>VAT ID: {{ client_vat_id }}</p>{% endif %}
+                <h4>Kunde:</h4>
+                <p>{{ client_name | default('[Kundenname]') }}</p>
+                <p>{{ client_address | default('[Kundenadresse]') | safe }}</p>
+                {% if client_vat_id %}<p>USt-IdNr.: {{ client_vat_id }}</p>{% endif %}
             </div>
         </div>
 
         <div class="meta-info-section">
-            <p><strong>Invoice #:</strong> {{ invoice_number | default('[Invoice #]') }}</p>
-            <p><strong>Date:</strong> {{ invoice_date | default('[Date]') }}</p>
-            <p><strong>Due By:</strong> {{ due_date | default('[Due Date]') }}</p>
-            {% if delivery_date %}<p><strong>Service Date:</strong> {{ delivery_date }}</p>{% endif %}
+            <p><strong>Rechnungsnr.:</strong> {{ invoice_number | default('[Rechnungsnr.]') }}</p>
+            <p><strong>Datum:</strong> {{ invoice_date | default('[Datum]') }}</p>
+            <p><strong>Fällig bis:</strong> {{ due_date | default('[Fällig am]') }}</p>
+            {% if delivery_date %}<p><strong>Leistungsdatum:</strong> {{ delivery_date }}</p>{% endif %}
         </div>
 
         <div class="items-table-section">
             <table>
                 <thead>
                     <tr>
-                        <th>Service / Product</th>
-                        <th class="text-right">Quantity</th>
-                        <th class="text-right">Unit Price (€)</th>
-                        <th class="text-right">VAT (%)</th>
-                        <th class="text-right">Amount (€)</th>
+                        <th>Leistung / Produkt</th>
+                        <th class="text-right">Menge</th>
+                        <th class="text-right">Stückpreis (€)</th>
+                        <th class="text-right">MwSt. (%)</th>
+                        <th class="text-right">Betrag (€)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -141,7 +87,7 @@
                     </tr>
                     {% else %}
                     <tr>
-                        <td colspan="5" style="text-align:center;">No items.</td>
+                        <td colspan="5" style="text-align:center;">Keine Positionen.</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -151,15 +97,15 @@
         <div class="totals-section">
             <table>
                 <tr>
-                    <td class="label">Subtotal:</td>
+                    <td class="label">Zwischensumme:</td>
                     <td class="value">€{{ subtotal | default('0.00') }}</td>
                 </tr>
                 <tr>
-                    <td class="label">Total VAT:</td>
+                    <td class="label">MwSt. Gesamt:</td>
                     <td class="value">€{{ total_vat | default('0.00') }}</td>
                 </tr>
                 <tr class="grand-total">
-                    <td class="label">Total Due:</td>
+                    <td class="label">Gesamtbetrag:</td>
                     <td class="value">€{{ grand_total | default('0.00') }}</td>
                 </tr>
             </table>
@@ -169,20 +115,20 @@
         <div class="additional-info-section">
             {% if payment_terms %}
             <div>
-                <h5>Payment Instructions:</h5>
+                <h5>Zahlungsanweisungen:</h5>
                 <p>{{ payment_terms | safe }}</p>
             </div>
             {% endif %}
             {% if notes %}
-            <div style="margin-top: {% if payment_terms %}15px{% else %}0{% endif %};">
-                <h5>Additional Notes:</h5>
+            <div style="margin-top: {% if payment_terms %}3mm{% else %}0{% endif %};">
+                <h5>Zusätzliche Hinweise:</h5>
                 <p>{{ notes | safe }}</p>
             </div>
             {% endif %}
         </div>
 
         <div class="page-footer">
-            <p>Thank you for your business!</p>
+            <p>Vielen Dank für Ihren Auftrag!</p>
         </div>
     </div>
 </body>

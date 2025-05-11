@@ -1,10 +1,147 @@
-/* Styles for Invoice Design 2 */
-#invoice-design-2 {
-    border: 2px dashed green;
-    padding: 15px;
-    background-color: #e6ffe6;
+/* Invoice Design 2 - Classic */
+body {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 11px; /* Slightly larger base font for classic look */
+    color: #000000;
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff;
 }
 
-#invoice-design-2 h4 {
-    color: green;
+.invoice-container {
+    width: 90%; /* Use more page width */
+    margin: 25px auto;
+    padding: 25px;
+    border: 1px solid #000000; /* Simple border */
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.header .company-name {
+    font-size: 2.6em;
+    font-weight: bold;
+    margin: 0 0 5px 0;
+}
+.header .invoice-title {
+    font-size: 2.4em;
+    font-weight: bold;
+    margin: 0 0 20px 0;
+    border-bottom: 2px solid #000000;
+    padding-bottom: 10px;
+    display: inline-block;
+}
+
+.details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px; /* Increased gap */
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #000000;
+}
+
+.details-grid .column h3 {
+    font-size: 1.2em;
+    margin-top: 0;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #555555;
+    padding-bottom: 5px;
+}
+
+.details-grid p {
+    margin: 0 0 7px 0; /* Increased bottom margin */
+    line-height: 1.6; /* Increased line height */
+}
+.details-grid p strong {
+    display: inline-block;
+    min-width: 110px; /* Ensure labels align */
+    font-weight: bold;
+}
+
+
+.invoice-particulars {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #000000;
+}
+.invoice-particulars p {
+    margin: 0 0 7px 0;
+    line-height: 1.6;
+}
+.invoice-particulars p strong {
+    display: inline-block;
+    min-width: 130px;
+    font-weight: bold;
+}
+
+
+.items-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    margin-bottom: 25px;
+}
+
+.items-table th, .items-table td {
+    border: 1px solid #000000;
+    padding: 9px; /* Slightly increased padding */
+    text-align: left;
+    vertical-align: top;
+}
+
+.items-table th {
+    background-color: #f0f0f0; /* Light gray for table headers */
+    font-size: 1.05em;
+    font-weight: bold;
+}
+.items-table td.description { width: 45%; }
+.items-table td.quantity, .items-table td.vat { text-align: right; width: 10%; }
+.items-table td.unit-price, .items-table td.total { text-align: right; width: 17.5%; }
+
+
+.totals-section {
+    margin-top: 20px;
+    float: right; /* Align totals to the right */
+    width: 40%; /* Adjust width as needed */
+}
+
+.totals-section table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.totals-section td {
+    padding: 7px 9px; /* Slightly increased padding */
+    font-size: 1.05em;
+}
+.totals-section td.label {
+    text-align: right;
+    font-weight: bold;
+}
+.totals-section td.amount {
+    text-align: right;
+}
+.totals-section .grand-total td {
+    font-size: 1.2em;
+    font-weight: bold;
+    border-top: 2px solid #000000;
+    padding-top: 8px;
+}
+
+.footer-notes {
+    clear: both; /* Clear float from totals section */
+    margin-top: 35px; /* Increased margin */
+    padding-top: 20px;
+    border-top: 1px solid #000000;
+    font-size: 0.95em;
+    line-height: 1.5;
+}
+.footer-notes p {
+    margin: 0 0 6px 0;
+}
+.footer-notes p strong {
+    font-weight: bold;
 }

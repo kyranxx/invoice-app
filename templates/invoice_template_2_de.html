@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ get_translation('invoice_title_pdf', lang_code) }} {{ invoice_number }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/invoice_design_2.css') }}">
+</head>
+<body class="invoice-design-2-body">
+    <div class="invoice-page invoice-design-2-page">
+        <div class="header-section">
+            <div class="company-name">{{ supplier_name }}</div>
+            <h1>{{ get_translation('invoice_title_header', lang_code) }}</h1>
+        </div>
+
+        <div class="address-section">
+            <div class="supplier-address">
+                <h4>{{ get_translation('from_title_pdf', lang_code) }}:</h4>
+                <p>{{ supplier_name }}</p>
+                <p>{{ supplier_address | replace('\n', '<br>') | safe }}</p>
+                <p>{{ get_translation('tax_id_pdf', lang_code) }}: {{ supplier_tax_id }}</p>
+                <p>{{ get_translation('bank_details_pdf', lang_code) }}: {{ supplier_bank_details }}</p>
+            </div>
+            <div class="client-address">
+                <h4>{{ get_translation('to_title_pdf', lang_code) }}:</h4>
+                <p>{{ client_name }}</p>
+                <p>{{ client_address | replace('\n', '<br>') | safe }}</p>
+                {% if client_vat_id %}<p>{{ get_translation('vat_id_pdf', lang_code) }}: {{ client_vat_id }}</p>{% endif %}
+            </div>
+        </div>
+
+        <div class="meta-section">
+            <div><strong>{{ get_translation('invoice_number_pdf', lang_code) }}:</strong> {{ invoice_number }}</div>
+            <div><strong>{{ get_translation('invoice_date_pdf', lang_code) }}:</strong> {{ invoice_date }}</div>
+            <div><strong>{{ get_translation('due_date_pdf', lang_code) }}:</strong> {{ due_date }}</div>
+            {% if delivery_date %}<div><strong>{{ get_translation('delivery_date_pdf', lang_code) }}:</strong> {{ delivery_date }}</div>{% endif %}
+        </div>
+
+        <div class="items-section">
+            <table>
+                <thead>
+                    <tr>
+                        <th>{{ get_translation('description_pdf', lang_code) }}</th>
+                        <th class="text-center">{{ get_translation('quantity_pdf', lang_code) }}</th>
+                        <th class="text-right">{{ get_translation('unit_price_pdf', lang_code) }}</th>
+                        <th class="text-center">{{ get_translation('vat_rate_pdf', lang_code) }} (%)</th>
+                        <th class="text-right">{{ get_translation('total_pdf', lang_code) }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td>{{ item.description }}</td>
+                        <td class="text-center">{{ "%.2f"|format(item.quantity|float) }}</td>
+                        <td class="text-right">{{ "%.2f"|format(item.unit_price|float) }} {{ currency_symbol }}</td>
+                        <td class="text-center">{{ "%.2f"|format(item.vat_rate|float) }}%</td>
+                        <td class="text-right">{{ "%.2f"|format(item.total|float) }} {{ currency_symbol }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="totals-section">
+            <table>
+                <tr>
+                    <td class="label">{{ get_translation('subtotal_pdf', lang_code) }}:</td>
+                    <td class="value">{{ "%.2f"|format(subtotal|float) }} {{ currency_symbol }}</td>
+                </tr>
+                <tr>
+                    <td class="label">{{ get_translation('total_vat_pdf', lang_code) }}:</td>
+                    <td class="value">{{ "%.2f"|format(total_vat|float) }} {{ currency_symbol }}</td>
+                </tr>
+                <tr class="grand-total">
+                    <td class="label">{{ get_translation('total_amount_pdf', lang_code) }}:</td>
+                    <td class="value">{{ "%.2f"|format(total_amount|float) }} {{ currency_symbol }}</td>
+                </tr>
+            </table>
+        </div>
+
+        {% if payment_terms or notes %}
+        <div class="footer-notes">
+            {% if payment_terms %}<p><strong>{{ get_translation('payment_terms_pdf', lang_code) }}:</strong><br>{{ payment_terms | safe }}</p>{% endif %}
+            {% if notes %}<p><strong>{{ get_translation('notes_pdf', lang_code) }}:</strong><br>{{ notes | safe }}</p>{% endif %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
