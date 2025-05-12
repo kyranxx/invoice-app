@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    let currentLanguage = localStorage.getItem('invoiceLang') || 'en';
+    let currentLanguage = localStorage.getItem('invoiceLang') || 'de'; // Default to German
 
     function applyTranslations(lang) {
         document.querySelectorAll('[data-translate-key]').forEach(el => {
