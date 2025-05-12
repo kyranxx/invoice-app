@@ -7,9 +7,9 @@ set -e
 
 # Define project directory (IMPORTANT: Update this to your actual project path on PythonAnywhere)
 # Example: PROJECT_DIR="/home/YourUserName/YourProjectName"
-PROJECT_DIR=$(dirname "$0") # Assumes deploy.sh is in the project root
+# PROJECT_DIR=$(dirname "$0") # Assumes deploy.sh is in the project root
 # If not, specify the absolute path:
-# PROJECT_DIR="/home/your_pythonanywhere_username/your_project_directory_name"
+PROJECT_DIR="/home/kyranxx/invoice-app"
 
 # Define PythonAnywhere WSGI file path (IMPORTANT: Update this)
 # This is the file you "touch" to reload the web app.
@@ -17,7 +17,7 @@ PROJECT_DIR=$(dirname "$0") # Assumes deploy.sh is in the project root
 # Or if using a virtualenv wrapper for a specific app:
 # WSGI_FILE="/home/YourUserName/.virtualenvs/YourVirtualEnvName/var/www/yourusername_pythonanywhere_com_wsgi.py"
 # Find this in your PythonAnywhere "Web" tab.
-WSGI_FILE="/var/www/your_pythonanywhere_username_pythonanywhere_com_wsgi.py" # <<< --- !!! UPDATE THIS LINE !!!
+WSGI_FILE="/var/www/kyranxx_pythonanywhere_com_wsgi.py" # <<< --- !!! UPDATE THIS LINE !!!
 
 # Define the branch to pull (e.g., main, master, develop)
 GIT_BRANCH="main" # <<< --- UPDATE THIS if you use a different branch for deployment
